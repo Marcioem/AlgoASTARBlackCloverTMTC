@@ -165,7 +165,7 @@ public class Graphs {
 				small = d[i];
 			}
 		}
-		nontreated.remove((Object) index);
+		nontreated.remove((Integer)index);
 		return index;
 	}
 
@@ -196,17 +196,19 @@ public class Graphs {
 		return new ShortestPathFromOneVertex(source, d, pi);
 	}
 
-	public static int getDistanceBetweenPoints(int start, int end, int[][] coords) {
-		int x1 = coords[start][0], x2 = coords[start][1], y1 = coords[end][0], y2 = coords[end][1];
+	public static int getDistanceBetweenPoints(int start, int end, Integer[][] coords) {
+		int x1 = coords[start][0], y1 = coords[start][1], x2 = coords[end][0], y2 = coords[end][1];
 		return  (int) Math.sqrt((x2-x1)*(x2-x1) + (y2-y1)*(y2-y1));
 	}
 
-	public static int astar(Graph graph, int source, int dest, int[][] coords) {
+	public static int astar(Graph graph, int source, int dest) {
+		Integer[][] coords = graph.getVerticesCoordinates();
 		//creation of data structures
 		int nbVertices = graph.numberOfVertices();
 		var f = new int[nbVertices];
 		var g = new int[nbVertices];
 		var h = new int[nbVertices];
+		Arrays.fill(f, Integer.MAX_VALUE);
 		List<Integer> border = new ArrayList<Integer>();
 		List<Integer> computed = new ArrayList<Integer>();
 
@@ -215,19 +217,21 @@ public class Graphs {
 		g[source] = 0;
 		for (int i=0; i<nbVertices; i++) {
 			h[i] = getDistanceBetweenPoints(i, dest, coords);
-			f[i] = g[i] + h[i];
 		}
 		border.add(source);
 		computed.add(source);
-		
+		int steps = 0 ; 
 		//processing
 		while (!border.isEmpty()) {
+			steps++;
 			int x = getSmallestValue(border, f);
 			if (x == dest) {
 				//vertex is accessible
-				return f[x];
+				int result =  (int)Math.ceil(((long)f[x]) * 1.6);
+				System.out.println("Astar: " + steps + "́etapes. \n Chemin de lg."+ result +".");
+				return result;
 			}
-			border.remove((Object) x);
+			border.remove((Integer) x);
 			graph.forEachEdge(x, (edge) -> {
 				int end = edge.getEnd();
 				int start = edge.getStart();

@@ -34,17 +34,16 @@ public class Main {
 					if(g==null) {
 						throw new IllegalStateException("Intent of add a vertex without initialize the graph.");
 					}
-					g.addVertex(Integer.parseInt(splittedLine[1]), Integer.parseInt(splittedLine[2]), Integer.parseInt(splittedLine[3]));
+					g.addVertex(Integer.parseInt(splittedLine[1])-1, Integer.parseInt(splittedLine[2]), Integer.parseInt(splittedLine[3]));
 					break;
 				default:
 					throw new IllegalStateException("Illegal letter in the .co file.");
 				}
-				System.out.println(line);
 			}
 			if(g==null) {
 				throw new IllegalStateException("There's not a graph in the .co file.");
 			}
-			
+
 			while ((line = brGr.readLine()) != null) {
 				String[] splittedLine = line.split(" ");
 				switch(splittedLine[0]) {
@@ -55,7 +54,7 @@ public class Main {
 					//Number of nodes and arcs 
 					break;
 				case "a":
-					g.addEdge(Integer.parseInt(splittedLine[1]), Integer.parseInt(splittedLine[2]), Integer.parseInt(splittedLine[3]));
+					g.addEdge(Integer.parseInt(splittedLine[1])-1, Integer.parseInt(splittedLine[2])-1, Integer.parseInt(splittedLine[3]));
 					break;
 				default:
 					throw new IllegalStateException("Illegal letter in the .gr file.");
@@ -79,5 +78,7 @@ public class Main {
 		int indexFirstVertex = Integer.parseInt(args[2]);
 		int indexSecondVertex = Integer.parseInt(args[3]);
 		Graph g = parserGraph(Paths.get(fileCoName), Paths.get(fileGrName));
+
+		System.out.println(Graphs.astar(g, indexFirstVertex-1, indexSecondVertex-1));
 	}
 }

@@ -53,7 +53,7 @@ public class AdjGraph implements Graph {
 	@Override
 	public void addEdge(int i, int j, int value) {
 		if (isEdge(i, j)) {
-			throw new IllegalArgumentException("Cette arête existe déjà : " + i + " -- " + j);
+			return;
 		}
 		if (value == 0) {
 			throw new IllegalArgumentException("Vous ne pouvez pas ajouter une arête de poids nul");
@@ -62,7 +62,7 @@ public class AdjGraph implements Graph {
 		nbEdges++;
 	}
 	
-	public void addVertex(int index, int lat, int lon) {
+	public void addVertex(int index, int lon, int lat) {
 		verticesCoordinates[index][0] = lon;
 		verticesCoordinates[index][1] = lat;
 	}
@@ -126,6 +126,11 @@ public class AdjGraph implements Graph {
 	@Override
 	public String toString() {
 		return adj.toString();
+	}
+	
+	@Override
+	public Integer[][] getVerticesCoordinates(){
+		return this.verticesCoordinates;
 	}
 
 }

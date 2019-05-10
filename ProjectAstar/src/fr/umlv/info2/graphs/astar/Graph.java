@@ -83,6 +83,8 @@ public interface Graph {
 	 * @throws IndexOutOfBoundsException si i n'est pas un sommet du graphe
 	 */
 	void forEachEdge(int i, Consumer<Edge> consumer);
+	
+	Integer[][] getVerticesCoordinates();
 
 	/**
 	 * Fournit une réprésentaiuon du graphe au format .dot
@@ -188,4 +190,5 @@ public interface Graph {
 		});
 		return t;
 	}
+
 }

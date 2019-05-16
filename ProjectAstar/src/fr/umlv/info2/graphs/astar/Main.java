@@ -7,17 +7,18 @@ import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.Optional;
 
 public class Main {
 
 	private static void usage() {
-		System.out.println("Usage : Main fileCo fileGr indexFirstVertex indexSecondVertex");
+		System.out.println("Usage : Main fileCo fileGr [indexFirstVertex] [indexSecondVertex]");
 	}
 
 	private static Graph parserGraph(Path fileCoName, Path fileGrName){
 		try (
-				BufferedReader brCo = Files.newBufferedReader(fileCoName, StandardCharsets.UTF_8);
-				BufferedReader brGr = Files.newBufferedReader(fileGrName, StandardCharsets.UTF_8);
+			 BufferedReader brCo = Files.newBufferedReader(fileCoName, StandardCharsets.UTF_8);
+			 BufferedReader brGr = Files.newBufferedReader(fileGrName, StandardCharsets.UTF_8);
 				) {
 			String line;
 			Graph g = null;
@@ -66,19 +67,31 @@ public class Main {
 		}
 	}
 
-
-	public static void main(String[] args) {
-		if (args.length < 4) {
+	public static void main(String[] args) throws IOException {
+		if (args.length < 2) {
 			usage();
 			return;
 		}
 
 		String fileCoName = args[0] + ".co";
 		String fileGrName = args[1] + ".gr";
-		int indexFirstVertex = Integer.parseInt(args[2]);
-		int indexSecondVertex = Integer.parseInt(args[3]);
-		Graph g = parserGraph(Paths.get(fileCoName), Paths.get(fileGrName));
 
-		System.out.println(Graphs.astar(g, indexFirstVertex-1, indexSecondVertex-1));
+		Graph g = parserGraph(Paths.get(fileCoName), Paths.get(fileGrName));
+		int indexFirstVertex;
+		int indexSecondVertex;
+		
+		if(args.length >=4) {
+			indexFirstVertex = Integer.parseInt(args[2])-1;
+			indexSecondVertex = Integer.parseInt(args[3])-1;
+		}else{
+			indexFirstVertex = 0;
+			indexSecondVertex = g.numberOfVertices()-1;
+		}
+		Optional<ShortestPathFromOneVertex> spfov = Graphs.astar(g, indexFirstVertex, indexSecondVertex);
+		if(!spfov.isEmpty()) {
+			spfov.get().printShortestPathTo(indexSecondVertex);
+			return;
+		}
+		System.out.println("vertex " + indexSecondVertex + " is not accessible by the vertex :" + indexFirstVertex);
 	}
 }

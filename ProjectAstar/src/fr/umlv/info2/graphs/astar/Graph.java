@@ -84,7 +84,7 @@ public interface Graph {
 	 */
 	void forEachEdge(int i, Consumer<Edge> consumer);
 	
-	Integer[][] getVerticesCoordinates();
+	int[][] getVerticesCoordinates();
 
 	/**
 	 * Fournit une réprésentaiuon du graphe au format .dot

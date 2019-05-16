@@ -9,7 +9,7 @@ import java.util.function.Consumer;
 public class AdjGraph implements Graph {
 	private final ArrayList<LinkedList<Edge>> adj;
 	private final int n;
-	private final Integer[][] verticesCoordinates;
+	private int[][] verticesCoordinates;
 	private int nbEdges;
 
 	AdjGraph(int n) {
@@ -21,7 +21,7 @@ public class AdjGraph implements Graph {
 		for(int i = 0; i<n; i++) {
 			adj.add(new LinkedList<Edge>());
 		}
-		this.verticesCoordinates = new Integer[n][2];
+		this.verticesCoordinates = new int[n][2];
 		nbEdges = 0;
 	}
 
@@ -41,15 +41,6 @@ public class AdjGraph implements Graph {
 		return new AdjGraph(n);
 	}
 
-	/*public static AdjGraph makeRandomGraph(int n, int nbEdges, int wmax) {
-		return (AdjGraph) Graph.makeRandomGraph(n, nbEdges, wmax, AdjGraph::makeGraph);
-	}
-
-	public static AdjGraph makeGraphFromMatrixFile(Path path) throws IOException {
-		Objects.requireNonNull(path);
-		return (AdjGraph) Graph.makeGraphFromMatrixFile(path, AdjGraph::makeGraph);
-	}*/
-
 	@Override
 	public void addEdge(int i, int j, int value) {
 		if (isEdge(i, j)) {
@@ -61,7 +52,8 @@ public class AdjGraph implements Graph {
 		adj.get(i).add(new Edge(i, j, value));
 		nbEdges++;
 	}
-	
+
+	@Override
 	public void addVertex(int index, int lon, int lat) {
 		verticesCoordinates[index][0] = lon;
 		verticesCoordinates[index][1] = lat;
@@ -127,10 +119,18 @@ public class AdjGraph implements Graph {
 	public String toString() {
 		return adj.toString();
 	}
-	
+
 	@Override
-	public Integer[][] getVerticesCoordinates(){
+	public int[][] getVerticesCoordinates(){
 		return this.verticesCoordinates;
 	}
 
+	/*public static AdjGraph makeRandomGraph(int n, int nbEdges, int wmax) {
+	return (AdjGraph) Graph.makeRandomGraph(n, nbEdges, wmax, AdjGraph::makeGraph);
+}
+
+public static AdjGraph makeGraphFromMatrixFile(Path path) throws IOException {
+	Objects.requireNonNull(path);
+	return (AdjGraph) Graph.makeGraphFromMatrixFile(path, AdjGraph::makeGraph);
+}*/
 }

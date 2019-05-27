@@ -5,6 +5,8 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
+import java.util.PriorityQueue;
+import java.util.TreeMap;
 import java.util.concurrent.atomic.LongAdder;
 
 public class Graphs {
@@ -169,6 +171,19 @@ public class Graphs {
 		nontreated.remove((Integer)index);
 		return index;
 	}
+	
+	private static int getSmallestValue(PriorityQueue<Integer> nontreated, int[] d) {
+		int small = Integer.MAX_VALUE;
+		int index = 0;
+		for(Integer i : nontreated) {
+			if (d[i] < small) {
+				index = i;
+				small = d[i];
+			}
+		}
+		nontreated.remove((Integer)index);
+		return index;
+	}
 
 	public static ShortestPathFromOneVertex dijkstra(Graph g, int source) {
 		int nbVertices = g.numberOfVertices();
@@ -211,8 +226,8 @@ public class Graphs {
 		var g = new int[nbVertices];
 		var h = new int[nbVertices];
 		var pi = new int[nbVertices];
-		List<Integer> border = new ArrayList<Integer>();
-		List<Integer> computed = new ArrayList<Integer>();
+		PriorityQueue<Integer> border = new PriorityQueue<Integer>();
+		TreeMap<Integer, Integer> computed = new TreeMap<>();
 		
 		//Filling data structure
 		initDistanceBetweenPoint(h, coords, dest);
@@ -221,7 +236,7 @@ public class Graphs {
 		Arrays.fill(pi, -1);
 		g[source] = 0;
 		border.add(source);
-		computed.add(source);
+		computed.put(source, source);
 		 
 		//processing
 		int steps = 0;
@@ -237,7 +252,7 @@ public class Graphs {
 			graph.forEachEdge(x, (edge) -> {
 				int end = edge.getEnd();
 				int value = edge.getValue();
-				if (computed.contains(end)) {
+				if (computed.containsKey(end)) {
 					if (g[end] > g[x] + value) {
 						g[end] = g[x]+value;
 						pi[end] = x;
@@ -251,7 +266,7 @@ public class Graphs {
 					pi[end] = x;
 					f[end] = g[end] + h[end];
 					border.add(end);
-					computed.add(end);
+					computed.put(end, end);
 				}
 			});
 		}

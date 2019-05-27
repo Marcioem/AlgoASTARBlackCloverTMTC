@@ -44,7 +44,7 @@ public class Main {
 			if(g==null) {
 				throw new IllegalStateException("There's not a graph in the .co file.");
 			}
-
+			System.out.println("Parsing du co terminé");
 			while ((line = brGr.readLine()) != null) {
 				String[] splittedLine = line.split(" ");
 				switch(splittedLine[0]) {
@@ -61,6 +61,7 @@ public class Main {
 					throw new IllegalStateException("Illegal letter in the .gr file.");
 				}
 			}
+			System.out.println("Parsing du gr terminé");
 			return g;
 		}catch(IOException e ) {
 			throw new UncheckedIOException(e);
@@ -77,6 +78,7 @@ public class Main {
 		String fileGrName = args[1] + ".gr";
 
 		Graph g = parserGraph(Paths.get(fileCoName), Paths.get(fileGrName));
+		System.out.println("End of parsing.");
 		int indexFirstVertex;
 		int indexSecondVertex;
 		
